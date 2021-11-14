@@ -1,7 +1,6 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { DemoDictionaryPopulator } from './model/demo/demo-dictionary-populator';
 import { Dictionary } from './model/dictionary';
-import { Tag } from './model/tag';
 
 @Injectable({
   providedIn: 'root'

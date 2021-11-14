@@ -1,4 +1,4 @@
-import { AfterViewChecked, ChangeDetectorRef, Component, NgZone, OnInit, ViewChild } from '@angular/core';
+import { AfterViewChecked, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { DictionaryService } from './dictionary.service';
 import { TagFilterMode } from './model/demo/tag-filter-mode';
 import { Dictionary } from './model/dictionary';
