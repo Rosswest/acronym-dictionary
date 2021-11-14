@@ -85,8 +85,8 @@ export class DictionaryComponent implements OnInit, AfterViewChecked {
   }
 
   search(): void {
-    this.recalculateGridSize();
     this.searchResults = this.dictionary.searchForDisplay(this.acronymFilter, this.tagsFilter, this.tagFilterMode, this.descriptionFilter);
+    this.recalculateGridSize();
   }
 
   recalculateGridSize() {
