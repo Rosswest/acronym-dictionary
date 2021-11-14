@@ -14,6 +14,13 @@
         </div>
     </div>
 
+    <!-- Tag Filter Mode Input -->
+    <div class="field no-gap">
+        <div class="field-input">
+            <p-selectButton [options]="tagFilterModes" [(ngModel)]="tagFilterMode" (ngModelChange)="search()"  optionLabel="name"></p-selectButton>
+        </div>
+    </div>
+
     <!-- Description Input -->
     <div class="field">
         <div class="field-input">

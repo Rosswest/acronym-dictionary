@@ -13,9 +13,11 @@ export class DictionaryComponent implements OnInit {
 
   public acronymFilter: string;
   public tagsFilter: Tag[];
+  public tagFilterMode: string;
   public descriptionFilter: string;
   public searching: boolean = false;
   
+  tagFilterModes: any[] = [{name: 'Any'},{name: 'All'}];
   suggestedTags: Tag[] = [];
   dictionary: Dictionary;
   searchResults: DisplayableAcronym[] = [];
@@ -26,6 +28,7 @@ export class DictionaryComponent implements OnInit {
 
   ngOnInit(): void {
     this.dictionaryService.populateDefaultDictionary();
+    this.tagFilterMode = this.tagFilterModes[0];
     this.fetchDictionary();
     this.search();
   }
