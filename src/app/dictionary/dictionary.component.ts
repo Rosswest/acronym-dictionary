@@ -22,7 +22,7 @@ export class DictionaryComponent implements OnInit, AfterViewChecked {
   public searching: boolean = false;
   
   /* Page Data*/
-  public tagFilterModes: any[] = [TagFilterMode.ANY, TagFilterMode.ALL];
+  public tagFilterModes: any[] = [TagFilterMode.ANY, TagFilterMode.ALL, TagFilterMode.ONLY];
   public suggestedTags: Tag[] = [];
   public dictionary: Dictionary;
   public searchResults: DisplayableAcronym[] = [];
