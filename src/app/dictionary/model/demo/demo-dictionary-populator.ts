@@ -13,10 +13,11 @@ export class DemoDictionaryPopulator {
     private rng: PseudoRandomNumberGenerator;
     
     private static readonly TAGS_TO_INSERT = [
-        "Random",
-        "Unusual",
-        "Uncategorized",
         "General",
+        "Tech",
+        "Organization",
+        "Logistics",
+        "Uncommon",
         "Rare"
     ];
 
@@ -134,18 +135,11 @@ export class DemoDictionaryPopulator {
         {short: "AFL", full: "American Football League"},
         {short: "AMA", full: "American Medical Association"},
         {short: "APA", full: "American Psychological Association"},
-        {short: "BBW", full: "Big Beautiful Woman"},
-        {short: "BF", full: "Boyfriend"},
         {short: "ESPN", full: "Entertainment and Sports Programming Network"},
         {short: "F2F", full: "Face to Face"},
         {short: "FLAG", full: "Foreign Language Association of Georgia"},
-        {short: "GF", full: "Girlfriend"},
-        {short: "IR", full: "Interacial"},
-        {short: "LDR", full: "Long Distance Relationship"},
         {short: "MADD", full: "Mothers Against Drunk Driving"},
         {short: "MLA", full: "Modern Language Association"},
-        {short: "MOTOS", full: "Member Of The Opposite Sex"},
-        {short: "MOTSS", full: "Member Of The Same Sex"},
         {short: "NBA", full: "National Basketball Association"},
         {short: "NFL", full: "National Football League"},
         {short: "NHL", full: "National Hockey League"},
@@ -153,12 +147,14 @@ export class DemoDictionaryPopulator {
         {short: "PGA", full: "Professional Golfer’s Association"},
         {short: "SPCA", full: "Society for the Prevention of Cruelty to Animals"},
         {short: "SO", full: "Significant Other"},
-        {short: "SWF", full: "Single White Female"},
-        {short: "SWM", full: "Single White Male"},
-        {short: "TS", full: "Transsexual"},
-        {short: "VBD", full: "Very Bad Date"},
         {short: "WWE", full: "World Wrestling Entertainment"},
-        {short: "ZIP code", full: "Zone Improvement Plan code"}
+        {short: "ZIP code", full: "Zone Improvement Plan code"},
+        {short: "FIS", full: "First In, test"},
+        {short: "FI", full: "First In"},
+        {short: "JRE", tagsToAdd: ['Tech'], full: "Java Runtime Environment"},
+        {short: "JDK", tagsToAdd: ['Tech'], full: "Java Development Kit"},
+        {short: "POJO", tagsToAdd: ['Tech'], full: "Plain Old Java Object"}
+
     ];
 
     constructor() {
@@ -176,11 +172,9 @@ export class DemoDictionaryPopulator {
             tags.push(tag);
         }
 
-        const tagCount = tags.length;
-        let i = 0;
-        for (const acronymData of DemoDictionaryPopulator.ACRONYMS_TO_INSERT) {
+        for (const acronymData of DemoDictionaryPopulator.ACRONYMS_TO_INSERT) {``
             //20% chance to have each tag assigned
-            const tagsToAssign = [];
+            const tagsToAssign = this.findTags(tags, acronymData.tagsToAdd);
             for (const tag of tags) {
                 const r = this.rng.getRandom();
                 const shouldAssign = (r < 0.2);
@@ -193,6 +187,21 @@ export class DemoDictionaryPopulator {
             const acronym = new Acronym(short, full, tagsToAssign, full, "Comment goes here");
             acronyms.push(acronym);
         }
+    }
+
+    findTags(tags: Tag[], tokens?: string[]): Tag[] {
+        const results: Tag[] = [];
+        if (tokens === null || tokens === undefined) {
+            return results;
+        }
+
+        for (const tag of tags) {
+            if (tokens.includes(tag.name)) {
+                results.push(tag);
+            }
+        }
+
+        return results
     }
 
     private generateDate(): Date {

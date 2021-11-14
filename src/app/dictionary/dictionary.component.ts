@@ -1,4 +1,4 @@
-import { AfterViewChecked, Component, NgZone, OnInit, ViewChild } from '@angular/core';
+import { AfterViewChecked, ChangeDetectorRef, Component, NgZone, OnInit, ViewChild } from '@angular/core';
 import { DictionaryService } from './dictionary.service';
 import { TagFilterMode } from './model/demo/tag-filter-mode';
 import { Dictionary } from './model/dictionary';
@@ -32,7 +32,8 @@ export class DictionaryComponent implements OnInit, AfterViewChecked {
   private gridSizeSet: boolean = false;
   @ViewChild('resultsGrid') gridElement: any;
 
-  constructor(private dictionaryService: DictionaryService) { }
+  constructor(private dictionaryService: DictionaryService,
+    private ref: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.dictionaryService.populateDefaultDictionary();
@@ -48,8 +49,8 @@ export class DictionaryComponent implements OnInit, AfterViewChecked {
       if (gridExists) {
         this.recalculateGridSize();
       }
+      this.ref.detectChanges();
     }
-
   }
 
   fetchDictionary(): void {

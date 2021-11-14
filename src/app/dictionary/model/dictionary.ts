@@ -38,13 +38,48 @@ export class Dictionary {
     filterOnAcronymQuery(results: Acronym[], acronymQuery: string): Acronym[] {
         const hasAcronymQuery = !((acronymQuery === null) || (acronymQuery === undefined));
         if (hasAcronymQuery) {
+
+            // filter out acronyms which don't contain query string
             const lowerCaseQuery = acronymQuery.toLowerCase();
             const filteredResults = results.filter(acronym => {
                 const lowerCaseName = acronym.short.toLowerCase();
                 const match = (lowerCaseName.includes(lowerCaseQuery));
                 return match;
             });
-            return filteredResults;
+
+            // move exact matches to the front of the list
+            for (const acronym of filteredResults) {
+                const acronymLowerCase = acronym.short.toLowerCase();
+                const exactMatch = (acronymLowerCase == lowerCaseQuery);
+                if (exactMatch) {
+
+                    // remove element
+                    const index = filteredResults.indexOf(acronym);
+                    filteredResults.splice(index,1);
+
+                    // re-add at start of list
+                    filteredResults.unshift(acronym);
+                }
+            }
+            const sortedResults = filteredResults.sort((first: Acronym, second: Acronym)=>{
+                const firstLowerCase = first.short.toLowerCase();
+                const secondLowerCase = second.short.toLowerCase();
+                const firstExactMatch = (firstLowerCase == lowerCaseQuery);
+                const secondExactMatch = (secondLowerCase == lowerCaseQuery);
+                const sameMatchType = (firstExactMatch == secondExactMatch);
+        
+                if (!sameMatchType) {
+                    if (firstExactMatch) {
+                        return -1;
+                    } else if (secondExactMatch) {
+                        return 1;
+                    }
+                }
+
+                return 0;
+            });
+
+            return sortedResults;
         } else {
             return results;
         }
