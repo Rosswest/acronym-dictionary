@@ -13,10 +13,11 @@ export class DemoDictionaryPopulator {
     private rng: PseudoRandomNumberGenerator;
     
     private static readonly TAGS_TO_INSERT = [
-        "Random",
-        "Unusual",
-        "Uncategorized",
         "General",
+        "Tech",
+        "Organization",
+        "Logistics",
+        "Uncommon",
         "Rare"
     ];
 
@@ -147,7 +148,13 @@ export class DemoDictionaryPopulator {
         {short: "SPCA", full: "Society for the Prevention of Cruelty to Animals"},
         {short: "SO", full: "Significant Other"},
         {short: "WWE", full: "World Wrestling Entertainment"},
-        {short: "ZIP code", full: "Zone Improvement Plan code"}
+        {short: "ZIP code", full: "Zone Improvement Plan code"},
+        {short: "FIS", full: "First In, test"},
+        {short: "FI", full: "First In"},
+        {short: "JRE", tagsToAdd: ['Tech'], full: "Java Runtime Environment"},
+        {short: "JDK", tagsToAdd: ['Tech'], full: "Java Development Kit"},
+        {short: "POJO", tagsToAdd: ['Tech'], full: "Plain Old Java Object"}
+
     ];
 
     constructor() {
@@ -165,11 +172,9 @@ export class DemoDictionaryPopulator {
             tags.push(tag);
         }
 
-        const tagCount = tags.length;
-        let i = 0;
-        for (const acronymData of DemoDictionaryPopulator.ACRONYMS_TO_INSERT) {
+        for (const acronymData of DemoDictionaryPopulator.ACRONYMS_TO_INSERT) {``
             //20% chance to have each tag assigned
-            const tagsToAssign = [];
+            const tagsToAssign = this.findTags(tags, acronymData.tagsToAdd);
             for (const tag of tags) {
                 const r = this.rng.getRandom();
                 const shouldAssign = (r < 0.2);
@@ -182,6 +187,21 @@ export class DemoDictionaryPopulator {
             const acronym = new Acronym(short, full, tagsToAssign, full, "Comment goes here");
             acronyms.push(acronym);
         }
+    }
+
+    findTags(tags: Tag[], tokens?: string[]): Tag[] {
+        const results: Tag[] = [];
+        if (tokens === null || tokens === undefined) {
+            return results;
+        }
+
+        for (const tag of tags) {
+            if (tokens.includes(tag.name)) {
+                results.push(tag);
+            }
+        }
+
+        return results
     }
 
     private generateDate(): Date {
