@@ -40,7 +40,12 @@ export class DictionaryComponent implements OnInit, AfterViewChecked {
     this.tagFilterMode = TagFilterMode.ANY;
     this.fetchDictionary();
     this.search();
-    this.recalculateGridSize();
+
+    // trigger a size refresh just in case something has gone wrong with the window at start up that
+    // may have messed with our size calculation
+    setTimeout(()=>{
+      this.recalculateGridSize();
+    },100);
   }
 
   ngAfterViewChecked(): void {
