@@ -12,18 +12,23 @@ import { Tag } from './model/tag';
 })
 export class DictionaryComponent implements OnInit, AfterViewChecked {
 
+  /* Active filter data*/
   public acronymFilter: string;
   public tagsFilter: Tag[];
   public tagFilterMode: TagFilterMode;
   public descriptionFilter: string;
-  public searching: boolean = false;
 
+  /* Page State*/
+  public searching: boolean = false;
+  
+  /* Page Data*/
   public tagFilterModes: any[] = [TagFilterMode.ANY, TagFilterMode.ALL];
   public suggestedTags: Tag[] = [];
   public dictionary: Dictionary;
   public searchResults: DisplayableAcronym[] = [];
   public scrollTableHeight: string;
 
+  /* Grid */
   private gridSizeSet: boolean = false;
   @ViewChild('resultsGrid') gridElement: any;
 
