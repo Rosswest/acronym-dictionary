@@ -3,12 +3,12 @@ import { CommonModule } from '@angular/common';
 import { DictionaryComponent } from './dictionary.component';
 import { DictionaryService } from './dictionary.service';
 import { DictionaryRoutingModule } from './dictionary-routing.module';
-import {InputTextModule} from 'primeng/inputtext';
+import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
-import {MultiSelectModule} from 'primeng/multiselect';
-import {TableModule} from 'primeng/table';
-import {SelectButtonModule} from 'primeng/selectbutton';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { TableModule } from 'primeng/table';
+import { SelectButtonModule } from 'primeng/selectbutton';
 
 @NgModule({
   declarations: [
@@ -19,7 +19,7 @@ import {SelectButtonModule} from 'primeng/selectbutton';
     FormsModule,
     ReactiveFormsModule,
     DictionaryRoutingModule,
-    InputTextModule ,
+    InputTextModule,
     MultiSelectModule,
     ButtonModule,
     TableModule,

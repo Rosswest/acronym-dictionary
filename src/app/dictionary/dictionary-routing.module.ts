@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { DictionaryComponent } from './dictionary.component';
 
 const routes: Routes = [
-  {path: '', component: DictionaryComponent, pathMatch: 'full'}
+  { path: '', component: DictionaryComponent, pathMatch: 'full' }
 ];
 
 @NgModule({
