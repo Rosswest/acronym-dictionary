@@ -40,7 +40,6 @@ export class DemoDictionaryPopulator {
         {short: "OFC", full: "Of Course"},
         {short: "OMG", full: "Oh My God"},
         {short: "PANS", full: "Pretty Awesome New Stuff"},
-        {short: "PHAT", full: "Pretty, Hot, And Tempting"},
         {short: "POS", full: "Parents Over Shoulder"},
         {short: "ROFL", full: "Rolling On the Floor Laughing"},
         {short: "SMH", full: "Shaking My Head"},

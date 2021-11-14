@@ -8,6 +8,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import {MultiSelectModule} from 'primeng/multiselect';
 import {TableModule} from 'primeng/table';
+import {SelectButtonModule} from 'primeng/selectbutton';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import {TableModule} from 'primeng/table';
     InputTextModule ,
     MultiSelectModule,
     ButtonModule,
-    TableModule
+    TableModule,
+    SelectButtonModule
   ],
   providers: [
     DictionaryService

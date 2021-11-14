@@ -1,4 +1,3 @@
-import { Component, OnInit } from '@angular/core';
 import { DictionaryService } from './dictionary.service';
 import { Dictionary } from './model/dictionary';
 import { DisplayableAcronym } from './model/displayable-acronym';
@@ -25,6 +24,7 @@ export class DictionaryComponent implements OnInit {
   ngOnInit(): void {
     this.dictionaryService.populateDefaultDictionary();
     this.fetchDictionary();
+    this.search();
   }
 
   fetchDictionary(): void {
@@ -32,7 +32,6 @@ export class DictionaryComponent implements OnInit {
   }
 
   filterTags(event: any) {
-    console.log(event);
     const query: string = event.query;
     const queryLowerCase = query.toLowerCase();
     let matchingTags: Tag[] = [];
@@ -44,7 +43,6 @@ export class DictionaryComponent implements OnInit {
       }
     }
 
-    console.log(matchingTags);
     if (matchingTags.length >= 2) {
       matchingTags = matchingTags.sort((first: Tag, second: Tag) => {
         return first.name.localeCompare(second.name);
@@ -53,7 +51,6 @@ export class DictionaryComponent implements OnInit {
 
 
     this.suggestedTags = matchingTags;
-    console.log(this.suggestedTags);
   }
 
   search(): void {
