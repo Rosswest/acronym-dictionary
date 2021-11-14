@@ -1,3 +1,4 @@
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { DictionaryService } from './dictionary.service';
 import { Dictionary } from './model/dictionary';
 import { DisplayableAcronym } from './model/displayable-acronym';
@@ -18,7 +19,9 @@ export class DictionaryComponent implements OnInit {
   suggestedTags: Tag[] = [];
   dictionary: Dictionary;
   searchResults: DisplayableAcronym[] = [];
+  scrollTableHeight: string;
 
+  @ViewChild('resultsGrid') gridElement: any;
   constructor(private dictionaryService: DictionaryService) { }
 
   ngOnInit(): void {
@@ -54,7 +57,18 @@ export class DictionaryComponent implements OnInit {
   }
 
   search(): void {
-    this.searchResults = this.dictionary.searchForDisplay(this.acronymFilter, this.tagsFilter, this.descriptionFilter);    
+    this.recalculateGridSize();   
+    this.searchResults = this.dictionary.searchForDisplay(this.acronymFilter, this.tagsFilter, this.descriptionFilter);
   }
+
+  recalculateGridSize() {
+    const gridExists = !(this.gridElement === null || this.gridElement === undefined);
+    if (gridExists) {
+        const gridYOffset = this.gridElement.el.nativeElement.offsetTop;
+        const documentHeight = document.documentElement.clientHeight;
+        const newHeight = documentHeight - gridYOffset - 10;
+        this.scrollTableHeight = newHeight + 'px';
+      }
+    }
 
 }

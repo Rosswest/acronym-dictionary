@@ -28,7 +28,8 @@
 </div>
 
 <div id="results-section">
-    <p-table [value]="searchResults">
+    <p-table #resultsGrid [value]="searchResults" (window:resize)="recalculateGridSize()" 
+    styleClass="p-datatable-gridlines p-datatable-striped" [scrollable]="true" [rows]="100" [scrollHeight]="scrollTableHeight">
         <ng-template pTemplate="header">
             <tr>
                 <th>Acronym</th>
