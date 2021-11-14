@@ -1,4 +1,4 @@
-import { AfterViewChecked, ChangeDetectorRef, Component, NgZone, OnInit, ViewChild } from '@angular/core';
+import { AfterViewChecked, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { DictionaryService } from './dictionary.service';
 import { TagFilterMode } from './model/demo/tag-filter-mode';
 import { Dictionary } from './model/dictionary';
@@ -22,7 +22,7 @@ export class DictionaryComponent implements OnInit, AfterViewChecked {
   public searching: boolean = false;
   
   /* Page Data*/
-  public tagFilterModes: any[] = [TagFilterMode.ANY, TagFilterMode.ALL];
+  public tagFilterModes: any[] = [TagFilterMode.ANY, TagFilterMode.ALL, TagFilterMode.ONLY];
   public suggestedTags: Tag[] = [];
   public dictionary: Dictionary;
   public searchResults: DisplayableAcronym[] = [];

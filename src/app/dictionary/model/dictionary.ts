@@ -26,7 +26,7 @@ export class Dictionary {
     }
 
     searchForDisplay(acronymQuery: string, tagsFilter: Tag[], tagFilterMode: TagFilterMode, descriptionQuery: string): DisplayableAcronym[] {
-        const results = this.search(acronymQuery,tagsFilter,tagFilterMode,descriptionQuery);
+        const results = this.search(acronymQuery, tagsFilter, tagFilterMode, descriptionQuery);
         const convertedResults = [];
         for (const result of results) {
             const displayItem = new DisplayableAcronym(result);
@@ -55,19 +55,19 @@ export class Dictionary {
 
                     // remove element
                     const index = filteredResults.indexOf(acronym);
-                    filteredResults.splice(index,1);
+                    filteredResults.splice(index, 1);
 
                     // re-add at start of list
                     filteredResults.unshift(acronym);
                 }
             }
-            const sortedResults = filteredResults.sort((first: Acronym, second: Acronym)=>{
+            const sortedResults = filteredResults.sort((first: Acronym, second: Acronym) => {
                 const firstLowerCase = first.short.toLowerCase();
                 const secondLowerCase = second.short.toLowerCase();
                 const firstExactMatch = (firstLowerCase == lowerCaseQuery);
                 const secondExactMatch = (secondLowerCase == lowerCaseQuery);
                 const sameMatchType = (firstExactMatch == secondExactMatch);
-        
+
                 if (!sameMatchType) {
                     if (firstExactMatch) {
                         return -1;
@@ -102,12 +102,18 @@ export class Dictionary {
         return results;
 
     }
+
     checkTagRequirementByMode(tags: Tag[], tagsFilter: Tag[], tagFilterMode: TagFilterMode) {
-       if (tagFilterMode === TagFilterMode.ALL) {
-        return this.checkIfHasAll(tags, tagsFilter);
-       } else {
-           return this.checkForOverlap(tags, tagsFilter);
-       }
+        if (tagFilterMode === TagFilterMode.ALL) {
+            return this.checkIfHasAll(tags, tagsFilter);
+        } else if (tagFilterMode === TagFilterMode.ANY) {
+            return this.checkForOverlap(tags, tagsFilter);
+        } else if (tagFilterMode === TagFilterMode.ONLY) {
+            return this.checkIfHasOnly(tags, tagsFilter);
+        } else {
+            throw new Error("Unsupported Tag Filter Mode: " + tagFilterMode);
+            return [];
+        }
     }
 
     filterOnDescriptionQuery(results: Acronym[], descriptionQuery: string): Acronym[] {
@@ -161,5 +167,27 @@ export class Dictionary {
     }
 
 
+    checkIfHasOnly(tags: Tag[], mustHave: Tag[]) {
+        const check = new Set<Tag>();
+
+        // add all tags to the set
+        for (const tag of tags) {
+            check.add(tag);
+        }
+
+        // ensure we have the tags, and remove then once found
+        for (const tag of mustHave) {
+            if (check.has(tag)) {
+                check.delete(tag);
+            } else {
+                // the tag isn't here, so return false  
+                return false;
+            }
+        }
+
+        // if there are any tags left in the set, then we have undesired tags
+        const onlyHasDesiredTags = (check.size === 0)
+        return onlyHasDesiredTags;
+    }   
 
 }
