@@ -1,0 +1,52 @@
+<div id="search-section">
+
+    <!-- Acronym input -->
+    <div class="field">
+        <div class="field-input p-float-label">
+            <label for="acronym-input ">Acronyms</label>
+            <input id="acronym-input" type="text" pInputText [(ngModel)]="acronymFilter"/>
+        </div>
+    </div>
+
+    <!-- Tag Input -->
+    <div class="field">
+        <div class="field-input p-float-label">
+            <label for="tag-input">Tags</label>
+            <p-multiSelect [options]="dictionary.tags" [(ngModel)]="tagsFilter" defaultLabel="Tags" optionLabel="name" display="chip"></p-multiSelect>
+        </div>
+    </div>
+
+    <!-- Description Input -->
+    <div class="field">
+        <div class="field-input p-float-label">
+            <label for="description-input">Description</label>
+            <input id="description-input" type="text" pInputText [(ngModel)]="descriptionFilter"/>
+        </div>
+    </div>
+
+    <!-- Search Button -->
+    <div class="field">
+            <p-button [disabled]="searching" label="Search" icon="pi pi-search" [loading]="searching" (onClick)="search()"></p-button>
+    </div>
+</div>
+
+<div id="results-section">
+    <p-table [value]="searchResults">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Acronym</th>
+                <th>Full Text</th>
+                <th>Tags</th>
+                <th>Description</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-entry>
+            <tr>
+                <td>{{entry.short}}</td>
+                <td>{{entry.full}}</td>
+                <td>{{entry.tagString}}</td>
+                <td>{{entry.description}}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>

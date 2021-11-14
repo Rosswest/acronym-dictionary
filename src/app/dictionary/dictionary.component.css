@@ -1,0 +1,9 @@
+.field {
+    display: inline-block;
+    margin: 5px;
+    margin-left: 10px;
+}
+
+:host::ng-deep .field .p-multiselect-chip {
+    width: 300px !important;
+}
