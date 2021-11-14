@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewChecked, Component, NgZone, OnInit, ViewChild } from '@angular/core';
 import { DictionaryService } from './dictionary.service';
 import { TagFilterMode } from './model/demo/tag-filter-mode';
 import { Dictionary } from './model/dictionary';
@@ -10,21 +10,23 @@ import { Tag } from './model/tag';
   templateUrl: './dictionary.component.html',
   styleUrls: ['./dictionary.component.css']
 })
-export class DictionaryComponent implements OnInit {
+export class DictionaryComponent implements OnInit, AfterViewChecked {
 
   public acronymFilter: string;
   public tagsFilter: Tag[];
   public tagFilterMode: TagFilterMode;
   public descriptionFilter: string;
   public searching: boolean = false;
-  
-  tagFilterModes: any[] = [TagFilterMode.ANY, TagFilterMode.ALL];
-  suggestedTags: Tag[] = [];
-  dictionary: Dictionary;
-  searchResults: DisplayableAcronym[] = [];
-  scrollTableHeight: string;
 
+  public tagFilterModes: any[] = [TagFilterMode.ANY, TagFilterMode.ALL];
+  public suggestedTags: Tag[] = [];
+  public dictionary: Dictionary;
+  public searchResults: DisplayableAcronym[] = [];
+  public scrollTableHeight: string;
+
+  private gridSizeSet: boolean = false;
   @ViewChild('resultsGrid') gridElement: any;
+
   constructor(private dictionaryService: DictionaryService) { }
 
   ngOnInit(): void {
@@ -32,6 +34,17 @@ export class DictionaryComponent implements OnInit {
     this.tagFilterMode = TagFilterMode.ANY;
     this.fetchDictionary();
     this.search();
+    this.recalculateGridSize();
+  }
+
+  ngAfterViewChecked(): void {
+    if (!this.gridSizeSet) {
+      const gridExists = !(this.gridElement === null || this.gridElement === undefined);
+      if (gridExists) {
+        this.recalculateGridSize();
+      }
+    }
+
   }
 
   fetchDictionary(): void {
@@ -68,11 +81,12 @@ export class DictionaryComponent implements OnInit {
   recalculateGridSize() {
     const gridExists = !(this.gridElement === null || this.gridElement === undefined);
     if (gridExists) {
-        const gridYOffset = this.gridElement.el.nativeElement.offsetTop;
-        const documentHeight = document.documentElement.clientHeight;
-        const newHeight = documentHeight - gridYOffset - 10;
-        this.scrollTableHeight = newHeight + 'px';
-      }
+      const gridYOffset = this.gridElement.el.nativeElement.offsetTop;
+      const documentHeight = document.documentElement.clientHeight;
+      const newHeight = documentHeight - gridYOffset - 10;
+      this.scrollTableHeight = newHeight + 'px';
+      this.gridSizeSet = true;
     }
+  }
 
 }
