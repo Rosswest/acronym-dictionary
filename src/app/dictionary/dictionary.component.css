@@ -11,3 +11,8 @@
 :host::ng-deep .field .p-multiselect-chip {
     width: 300px !important;
 }
+
+:host::ng-deep .clear-sort-icon {
+    padding-top: 0.4rem;
+    margin-left: 0.1rem;
+}
