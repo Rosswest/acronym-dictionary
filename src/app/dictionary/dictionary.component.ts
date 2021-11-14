@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { DictionaryService } from './dictionary.service';
+import { TagFilterMode } from './model/demo/tag-filter-mode';
 import { Dictionary } from './model/dictionary';
 import { DisplayableAcronym } from './model/displayable-acronym';
 import { Tag } from './model/tag';
@@ -13,11 +14,11 @@ export class DictionaryComponent implements OnInit {
 
   public acronymFilter: string;
   public tagsFilter: Tag[];
-  public tagFilterMode: string;
+  public tagFilterMode: TagFilterMode;
   public descriptionFilter: string;
   public searching: boolean = false;
   
-  tagFilterModes: any[] = [{name: 'Any'},{name: 'All'}];
+  tagFilterModes: any[] = [TagFilterMode.ANY, TagFilterMode.ALL];
   suggestedTags: Tag[] = [];
   dictionary: Dictionary;
   searchResults: DisplayableAcronym[] = [];
@@ -28,7 +29,7 @@ export class DictionaryComponent implements OnInit {
 
   ngOnInit(): void {
     this.dictionaryService.populateDefaultDictionary();
-    this.tagFilterMode = this.tagFilterModes[0];
+    this.tagFilterMode = TagFilterMode.ANY;
     this.fetchDictionary();
     this.search();
   }
