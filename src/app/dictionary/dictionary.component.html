@@ -3,40 +3,46 @@
     <!-- Acronym input -->
     <div class="field">
         <div class="field-input">
-            <input (keyup.enter)="search()" id="acronym-input" type="text" defaultLabel="Acronym" pInputText [(ngModel)]="acronymFilter"/>
+            <input (keyup.enter)="search()" id="acronym-input" type="text" placeholder="Acronym" pInputText
+                [(ngModel)]="acronymFilter" />
         </div>
     </div>
 
     <!-- Tag Input -->
     <div class="field">
         <div class="field-input">
-            <p-multiSelect (ngModelChange)="search()" [options]="dictionary.tags" [(ngModel)]="tagsFilter" defaultLabel="Tags" optionLabel="name" display="chip"></p-multiSelect>
+            <p-multiSelect (onChange)="search()" [options]="dictionary.tags" [(ngModel)]="tagsFilter"
+                defaultLabel="Tags" optionLabel="name" display="chip"></p-multiSelect>
         </div>
     </div>
 
     <!-- Tag Filter Mode Input -->
     <div class="field no-gap">
         <div class="field-input">
-            <p-selectButton [options]="tagFilterModes" [(ngModel)]="tagFilterMode" (ngModelChange)="search()"  optionLabel="name"></p-selectButton>
+            <p-selectButton [options]="tagFilterModes" [(ngModel)]="tagFilterMode" (ngModelChange)="search()"
+                optionLabel="name"></p-selectButton>
         </div>
     </div>
 
     <!-- Description Input -->
     <div class="field">
         <div class="field-input">
-            <input (keyup.enter)="search()" id="description-input" type="text" pInputText defaultLabel="Description" [(ngModel)]="descriptionFilter"/>
+            <input (keyup.enter)="search()" id="description-input" type="text" pInputText placeholder="Description"
+                [(ngModel)]="descriptionFilter" />
         </div>
     </div>
 
     <!-- Search Button -->
     <div class="field">
-        <p-button [disabled]="searching" label="Search" icon="pi pi-search" [loading]="searching" (onClick)="search()"></p-button>
+        <p-button [disabled]="searching" label="Search" icon="pi pi-search" [loading]="searching" (onClick)="search()">
+        </p-button>
     </div>
 </div>
 
 <div id="results-section">
-    <p-table #resultsGrid [value]="searchResults" (window:resize)="recalculateGridSize()" 
-    styleClass="p-datatable-gridlines p-datatable-striped" [scrollable]="true" [rows]="100" [scrollHeight]="scrollTableHeight">
+    <p-table #resultsGrid [value]="searchResults" (window:resize)="recalculateGridSize()"
+        styleClass="p-datatable-gridlines p-datatable-striped" [scrollable]="true" [rows]="100"
+        [scrollHeight]="scrollTableHeight">
         <ng-template pTemplate="header">
             <tr>
                 <th>Acronym</th>
