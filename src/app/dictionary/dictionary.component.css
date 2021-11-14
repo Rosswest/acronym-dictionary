@@ -4,6 +4,10 @@
     margin-left: 10px;
 }
 
+.field.no-gap {
+    margin-left: 0px;
+}
+
 :host::ng-deep .field .p-multiselect-chip {
     width: 300px !important;
 }
