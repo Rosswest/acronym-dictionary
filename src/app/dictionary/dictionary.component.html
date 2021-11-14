@@ -59,5 +59,12 @@
                 <td>{{entry.description}}</td>
             </tr>
         </ng-template>
+        <ng-template pTemplate="emptymessage" let-columns>
+            <tr>
+                <td [attr.colspan]="columns.length">
+                    No matching records
+                </td>
+            </tr>
+        </ng-template>
     </p-table>
 </div>
