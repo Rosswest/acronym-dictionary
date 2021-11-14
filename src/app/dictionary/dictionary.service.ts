@@ -1,7 +1,7 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
+import { CsvDictionaryPopulator } from './model/demo/csv-dictionary-populator';
 import { DemoDictionaryPopulator } from './model/demo/demo-dictionary-populator';
 import { Dictionary } from './model/dictionary';
-import { Tag } from './model/tag';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +17,11 @@ export class DictionaryService {
 
   populateDefaultDictionary() {
     const populator = new DemoDictionaryPopulator();
+    populator.populateDictionary(this.dictionary);
+  }
+
+  populateFromCsv(file: any) {
+    const populator = new CsvDictionaryPopulator(file);
     populator.populateDictionary(this.dictionary);
   }
 

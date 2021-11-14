@@ -37,6 +37,11 @@
         <p-button [disabled]="searching" label="Search" icon="pi pi-search" [loading]="searching" (onClick)="search()">
         </p-button>
     </div>
+
+    <div class="field">
+        <p-fileUpload #uploader name="fileInput" [showUploadButton]="true" [showCancelButton]="false" uploadLabel="Process" [customUpload]="true" (uploadHandler)="handleFileUpload($event)">
+        </p-fileUpload>
+    </div>
 </div>
 
 <div id="results-section">

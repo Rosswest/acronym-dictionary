@@ -20,6 +20,7 @@ export class DictionaryComponent implements OnInit, AfterViewChecked {
 
   /* Page State*/
   public searching: boolean = false;
+  dictionaryFile:any;
   
   /* Page Data*/
   public tagFilterModes: any[] = [TagFilterMode.ANY, TagFilterMode.ALL];
@@ -94,5 +95,24 @@ export class DictionaryComponent implements OnInit, AfterViewChecked {
       this.gridSizeSet = true;
     }
   }
+
+  onSelectFile(e: any) {
+    console.log(e);
+  }
+
+  onRemoveFile(e: any) {
+    this.dictionaryFile = null;
+  }
+
+  handleFileUpload(event: any) {
+    try {
+      this.readFile(event.files[0]);
+    } catch (exception) {
+      console.error(exception);
+      alert("There was a problem processing your file");
+    }
+
+  }
+
 
 }

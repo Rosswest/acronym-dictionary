@@ -9,6 +9,7 @@ import { ButtonModule } from 'primeng/button';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { TableModule } from 'primeng/table';
 import { SelectButtonModule } from 'primeng/selectbutton';
+import {FileUploadModule} from 'primeng/fileupload';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { SelectButtonModule } from 'primeng/selectbutton';
     MultiSelectModule,
     ButtonModule,
     TableModule,
-    SelectButtonModule
+    SelectButtonModule,
+    FileUploadModule
   ],
   providers: [
     DictionaryService
