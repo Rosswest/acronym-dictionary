@@ -12,6 +12,32 @@ export class Dictionary {
         this.reset();
     }
 
+    public static fromJSON(data: any): Dictionary {
+        const dictionary = new Dictionary();
+        Object.assign(dictionary, data)
+        Object.setPrototypeOf(dictionary, Dictionary.prototype);
+        const tagMap = new Map<string, Tag>();
+
+        for (const tag of dictionary.tags) {
+            Object.setPrototypeOf(tag, Tag.prototype);
+            tagMap.set(tag.name,tag);
+        }
+
+        for (const acronym of dictionary.acronyms) {
+            Object.setPrototypeOf(acronym, Acronym.prototype);
+            const actualTags: Tag[] = [];
+            for (const tag of acronym.tags) {
+                //replace raw data with actual tag
+                const actualTag: Tag = tagMap.get(tag.name)!;
+                actualTags.push(actualTag);
+            }
+            acronym.tags = actualTags;
+        }
+
+        return dictionary;
+
+    }
+
     public reset(): void {
         this.acronyms = [];
         this.tags = [];
