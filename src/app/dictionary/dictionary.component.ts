@@ -1,5 +1,6 @@
 import { AfterViewChecked, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { Table } from 'primeng/table';
+import { environment } from 'src/environments/environment';
 import { DictionaryService } from './dictionary.service';
 import { TagFilterMode } from './model/demo/tag-filter-mode';
 import { Dictionary } from './model/dictionary';
@@ -13,6 +14,8 @@ import { Tag } from './model/tag';
 })
 export class DictionaryComponent implements OnInit, AfterViewChecked {
 
+  private static readonly GENERATE_LOCAL_DICTIONARY: boolean = false;
+
   /* Active filter data*/
   public acronymFilter: string;
   public tagsFilter: Tag[];
@@ -21,7 +24,8 @@ export class DictionaryComponent implements OnInit, AfterViewChecked {
 
   /* Page State*/
   public searching: boolean = false;
-  
+  public fetchedDictionary: boolean = false;
+
   /* Page Data*/
   public tagFilterModes: any[] = [TagFilterMode.ANY, TagFilterMode.ALL, TagFilterMode.ONLY];
   public suggestedTags: Tag[] = [];
@@ -38,16 +42,8 @@ export class DictionaryComponent implements OnInit, AfterViewChecked {
     private ref: ChangeDetectorRef) { }
 
   ngOnInit(): void {
-    this.dictionaryService.populateDefaultDictionary();
     this.tagFilterMode = TagFilterMode.ANY;
     this.fetchDictionary();
-    this.search();
-
-    // trigger a size refresh just in case something has gone wrong with the window at start up that
-    // may have messed with our size calculation
-    setTimeout(()=>{
-      this.recalculateGridSize();
-    },100);
   }
 
   ngAfterViewChecked(): void {
@@ -61,7 +57,22 @@ export class DictionaryComponent implements OnInit, AfterViewChecked {
   }
 
   fetchDictionary(): void {
-    this.dictionary = this.dictionaryService.dictionary;
+    if (environment.generateLocalDictionary) {
+      this.dictionary = this.dictionaryService.getDemoDictionary();
+    } else {
+      this.dictionaryService.getRemoteDictionary().subscribe((dictionary)=>{
+        this.dictionary = dictionary;
+        this.fetchedDictionary = true;
+        this.search();
+  
+        // trigger a size refresh just in case something has gone wrong with the window at start up that
+        // may have messed with our size calculation
+        setTimeout(()=>{
+          this.recalculateGridSize();
+        },100);
+      });
+    }
+
   }
 
   filterTags(event: any) {
