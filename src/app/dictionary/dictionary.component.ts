@@ -6,6 +6,7 @@ import { TagFilterMode } from './model/demo/tag-filter-mode';
 import { Dictionary } from './model/dictionary';
 import { DisplayableAcronym } from './model/displayable-acronym';
 import { Tag } from './model/tag';
+import { DictionaryUtils } from './model/dictionary-utils';
 
 @Component({
   selector: 'app-dictionary',
@@ -13,6 +14,8 @@ import { Tag } from './model/tag';
   styleUrls: ['./dictionary.component.css']
 })
 export class DictionaryComponent implements OnInit, AfterViewChecked {
+
+  private static readonly EMPTY_SEARCH_TEXT: string = 'No filter';
 
   /* Active filter data*/
   public acronymFilter: string;
@@ -29,6 +32,7 @@ export class DictionaryComponent implements OnInit, AfterViewChecked {
   public suggestedTags: Tag[] = [];
   public dictionary: Dictionary;
   public searchResults: DisplayableAcronym[] = [];
+  public searchText: string;
   public scrollTableHeight: string;
 
   /* Grid */
@@ -41,6 +45,7 @@ export class DictionaryComponent implements OnInit, AfterViewChecked {
 
   ngOnInit(): void {
     this.tagFilterMode = TagFilterMode.ANY;
+    this.searchText = DictionaryComponent.EMPTY_SEARCH_TEXT;
     this.fetchDictionary();
   }
 
@@ -98,6 +103,7 @@ export class DictionaryComponent implements OnInit, AfterViewChecked {
   search(): void {
     this.searchResults = this.dictionary.searchForDisplay(this.acronymFilter, this.tagsFilter, this.tagFilterMode, this.descriptionFilter);
     this.recalculateGridSize();
+    this.updateSearchText();
   }
 
   recalculateGridSize() {
@@ -122,4 +128,37 @@ export class DictionaryComponent implements OnInit, AfterViewChecked {
     this.gridElement.sortField = '';
     this.gridElement.reset();
   }
+
+  updateSearchText() {
+    const hasAcronymQuery = !DictionaryUtils.isEmpty(this.acronymFilter);
+    const hasTagsQuery = !DictionaryUtils.isEmpty(this.tagsFilter);
+    const hasDescriptionQuery = !DictionaryUtils.isEmpty(this.descriptionFilter);
+    const tagFilterModeTerm = `${this.tagFilterMode.name} of`;
+    const terms = [];
+    if (hasAcronymQuery) {
+      const acronymTerm = hasAcronymQuery ? `Acronym: [${this.acronymFilter}]` : '';
+      terms.push(acronymTerm);
+    }
+
+    if (hasTagsQuery) {
+      const tagNames = this.tagsFilter.map(tag=>tag.name).join(', ');
+      const tagsTerm = hasTagsQuery ? `Tags: ${tagFilterModeTerm} [${tagNames}]`: '';
+      terms.push(tagsTerm);
+    }
+
+    if (hasDescriptionQuery) {
+      const descriptionTerm = hasDescriptionQuery ? `Description: [${this.descriptionFilter}]` : '';
+      terms.push(descriptionTerm);
+    }
+
+    const hasTerms = (terms.length > 0);
+    
+    if (hasTerms) {
+      this.searchText = terms.join(', ');
+    } else {
+      this.searchText = DictionaryComponent.EMPTY_SEARCH_TEXT;
+    }
+
+  }
+
 }
