@@ -58,16 +58,16 @@ export class DictionaryComponent implements OnInit, AfterViewChecked {
     if (environment.generateLocalDictionary) {
       this.dictionary = this.dictionaryService.getDemoDictionary();
     } else {
-      this.dictionaryService.getRemoteDictionary().subscribe((dictionary)=>{
+      this.dictionaryService.getRemoteDictionary().subscribe((dictionary) => {
         this.dictionary = dictionary;
         this.fetchedDictionary = true;
         this.search();
-  
+
         // trigger a size refresh just in case something has gone wrong with the window at start up that
         // may have messed with our size calculation
-        setTimeout(()=>{
+        setTimeout(() => {
           this.recalculateGridSize();
-        },100);
+        }, 100);
       });
     }
 

@@ -20,7 +20,7 @@ export class Dictionary {
 
         for (const tag of dictionary.tags) {
             Object.setPrototypeOf(tag, Tag.prototype);
-            tagMap.set(tag.name,tag);
+            tagMap.set(tag.name, tag);
         }
 
         for (const acronym of dictionary.acronyms) {
@@ -117,7 +117,7 @@ export class Dictionary {
         if (hasFilterTags) {
             hasFilterTags = (tagsFilter.length > 0);
         }
-        
+
         // if we have tags to filter on
         if (hasFilterTags) {
             const filteredResults = results.filter(acronym => {
@@ -227,6 +227,6 @@ export class Dictionary {
         // if there are any tags left in the set, then we have undesired tags
         const onlyHasDesiredTags = (check.size === 0)
         return onlyHasDesiredTags;
-    }   
+    }
 
 }

@@ -11,10 +11,10 @@ import { Dictionary } from './model/dictionary';
 })
 export class DictionaryService {
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient) { }
 
   getRemoteDictionary(): Observable<Dictionary> {
-    return this.httpClient.get(environment.dictionary_url, { responseType: 'json'}).pipe(map((dictionaryData=>{
+    return this.httpClient.get(environment.dictionary_url, { responseType: 'json' }).pipe(map((dictionaryData => {
       // strictly speaking not a dictionary object (just json) but dictionary has no real functionality
       const dictionary = Dictionary.fromJSON(dictionaryData);
       return dictionary;
