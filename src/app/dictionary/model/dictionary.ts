@@ -1,5 +1,7 @@
+import { isEmpty } from "rxjs/operators";
 import { Acronym } from "./acronym";
 import { TagFilterMode } from "./demo/tag-filter-mode";
+import { DictionaryUtils } from "./dictionary-utils";
 import { DisplayableAcronym } from "./displayable-acronym";
 import { Tag } from "./tag";
 
@@ -113,10 +115,7 @@ export class Dictionary {
 
     filterOnTags(results: Acronym[], tagsFilter: Tag[], tagFilterMode: TagFilterMode,): Acronym[] {
         // determine if tags were passed in
-        let hasFilterTags = !((tagsFilter === null) || (tagsFilter === undefined));
-        if (hasFilterTags) {
-            hasFilterTags = (tagsFilter.length > 0);
-        }
+        let hasFilterTags = !DictionaryUtils.isEmpty(tagsFilter);
 
         // if we have tags to filter on
         if (hasFilterTags) {
