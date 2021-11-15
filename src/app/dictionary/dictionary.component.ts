@@ -109,6 +109,8 @@ export class DictionaryComponent implements OnInit, AfterViewChecked {
   clearSort(event: any) {
     event.stopPropagation(); // stop the click triggering the filter the header click
     this.sorting = false;
+    this.gridElement.sortOrder = 0;
+    this.gridElement.sortField = '';
     this.gridElement.reset();
   }
 }
