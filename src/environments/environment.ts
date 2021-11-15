@@ -3,7 +3,8 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  dictionary_url: 'https://raw.githubusercontent.com/rosswest/acronym-dictionary/develop/demo/acronyms.json'
 };
 
 /*
