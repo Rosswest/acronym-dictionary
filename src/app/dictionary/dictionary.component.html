@@ -1,70 +1,75 @@
-<div id="search-section" class="clearfix">
-
-    <!-- Acronym input -->
-    <div class="field">
-        <div class="field-input">
-            <input (keyup.enter)="search()" id="acronym-input" type="text" placeholder="Acronym" pInputText
-                [(ngModel)]="acronymFilter" />
-        </div>
-    </div>
-
-    <!-- Tag Input -->
-    <div class="field">
-        <div class="field-input">
-            <p-multiSelect (onChange)="search()" [options]="dictionary.tags" [(ngModel)]="tagsFilter"
-                defaultLabel="Tags" optionLabel="name" display="chip"></p-multiSelect>
-        </div>
-    </div>
-
-    <!-- Tag Filter Mode Input -->
-    <div class="field no-gap">
-        <div class="field-input">
-            <p-selectButton [options]="tagFilterModes" [(ngModel)]="tagFilterMode" (ngModelChange)="search()"
-                optionLabel="name"></p-selectButton>
-        </div>
-    </div>
-
-    <!-- Description Input -->
-    <div class="field">
-        <div class="field-input">
-            <input (keyup.enter)="search()" id="description-input" type="text" pInputText placeholder="Description"
-                [(ngModel)]="descriptionFilter" />
-        </div>
-    </div>
-
-    <!-- Search Button -->
-    <div class="field">
-        <p-button [disabled]="searching" label="Search" icon="pi pi-search" [loading]="searching" (onClick)="search()">
-        </p-button>
-    </div>
+<div *ngIf="!fetchedDictionary" id="loading-container">
+    Loading...
 </div>
+<div *ngIf="fetchedDictionary" id="content-container">
+    <div id="search-section" class="clearfix">
 
-<div id="results-section">
-    <p-table #resultsGrid [value]="searchResults" (window:resize)="recalculateGridSize()"
-        styleClass="p-datatable-gridlines p-datatable-striped" [scrollable]="true" [rows]="100"
-        [scrollHeight]="scrollTableHeight">
-        <ng-template pTemplate="header">
-            <tr>
-                <th (click)="onSort($event)" pSortableColumn="short">Acronym <p-sortIcon field="short"></p-sortIcon><i *ngIf="false" (click)="clearSort($event)" class="clear-sort-icon pi pi-times"></i></th>
-                <th>Full Text</th>
-                <th>Tags</th>
-                <th>Description</th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-entry>
-            <tr>
-                <td>{{entry.short}}</td>
-                <td>{{entry.full}}</td>
-                <td>{{entry.tagString}}</td>
-                <td>{{entry.description}}</td>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="emptymessage" let-columns>
-            <tr>
-                <td [attr.colspan]="columns.length">
-                    No matching records
-                </td>
-            </tr>
-        </ng-template>
-    </p-table>
+        <!-- Acronym input -->
+        <div class="field">
+            <div class="field-input">
+                <input (keyup.enter)="search()" id="acronym-input" type="text" placeholder="Acronym" pInputText
+                    [(ngModel)]="acronymFilter" />
+            </div>
+        </div>
+    
+        <!-- Tag Input -->
+        <div class="field">
+            <div class="field-input">
+                <p-multiSelect (onChange)="search()" [options]="dictionary.tags" [(ngModel)]="tagsFilter"
+                    defaultLabel="Tags" optionLabel="name" display="chip"></p-multiSelect>
+            </div>
+        </div>
+    
+        <!-- Tag Filter Mode Input -->
+        <div class="field no-gap">
+            <div class="field-input">
+                <p-selectButton [options]="tagFilterModes" [(ngModel)]="tagFilterMode" (ngModelChange)="search()"
+                    optionLabel="name"></p-selectButton>
+            </div>
+        </div>
+    
+        <!-- Description Input -->
+        <div class="field">
+            <div class="field-input">
+                <input (keyup.enter)="search()" id="description-input" type="text" pInputText placeholder="Description"
+                    [(ngModel)]="descriptionFilter" />
+            </div>
+        </div>
+    
+        <!-- Search Button -->
+        <div class="field">
+            <p-button [disabled]="searching" label="Search" icon="pi pi-search" [loading]="searching" (onClick)="search()">
+            </p-button>
+        </div>
+    </div>
+    
+    <div id="results-section">
+        <p-table #resultsGrid [value]="searchResults" (window:resize)="recalculateGridSize()"
+            styleClass="p-datatable-gridlines p-datatable-striped" [scrollable]="true" [rows]="100"
+            [scrollHeight]="scrollTableHeight">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th (click)="onSort($event)" pSortableColumn="short">Acronym <p-sortIcon field="short"></p-sortIcon><i *ngIf="false" (click)="clearSort($event)" class="clear-sort-icon pi pi-times"></i></th>
+                    <th>Full Text</th>
+                    <th>Tags</th>
+                    <th>Description</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-entry>
+                <tr>
+                    <td>{{entry.short}}</td>
+                    <td>{{entry.full}}</td>
+                    <td>{{entry.tagString}}</td>
+                    <td>{{entry.description}}</td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage" let-columns>
+                <tr>
+                    <td [attr.colspan]="columns.length">
+                        No matching records
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
 </div>
