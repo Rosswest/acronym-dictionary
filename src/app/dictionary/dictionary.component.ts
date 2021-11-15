@@ -14,8 +14,6 @@ import { Tag } from './model/tag';
 })
 export class DictionaryComponent implements OnInit, AfterViewChecked {
 
-  private static readonly GENERATE_LOCAL_DICTIONARY: boolean = false;
-
   /* Active filter data*/
   public acronymFilter: string;
   public tagsFilter: Tag[];
