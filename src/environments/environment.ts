@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  dictionary_url: 'https://raw.githubusercontent.com/rosswest/acronym-dictionary/develop/demo/acronyms.json'
+  dictionary_url: 'https://raw.githubusercontent.com/rosswest/acronym-dictionary/develop/demo/acronyms.json',
+  generateLocalDictionary: false
 };
 
 /*
