@@ -1,10 +1,12 @@
 import { AfterViewChecked, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { Table } from 'primeng/table';
+import { environment } from 'src/environments/environment';
 import { DictionaryService } from './dictionary.service';
 import { TagFilterMode } from './model/demo/tag-filter-mode';
 import { Dictionary } from './model/dictionary';
 import { DisplayableAcronym } from './model/displayable-acronym';
 import { Tag } from './model/tag';
+import { DictionaryUtils } from './model/dictionary-utils';
 
 @Component({
   selector: 'app-dictionary',
@@ -12,6 +14,8 @@ import { Tag } from './model/tag';
   styleUrls: ['./dictionary.component.css']
 })
 export class DictionaryComponent implements OnInit, AfterViewChecked {
+
+  private static readonly EMPTY_SEARCH_TEXT: string = 'No filter';
 
   /* Active filter data*/
   public acronymFilter: string;
@@ -21,12 +25,14 @@ export class DictionaryComponent implements OnInit, AfterViewChecked {
 
   /* Page State*/
   public searching: boolean = false;
-  
+  public fetchedDictionary: boolean = false;
+
   /* Page Data*/
   public tagFilterModes: any[] = [TagFilterMode.ANY, TagFilterMode.ALL, TagFilterMode.ONLY];
   public suggestedTags: Tag[] = [];
   public dictionary: Dictionary;
   public searchResults: DisplayableAcronym[] = [];
+  public searchText: string;
   public scrollTableHeight: string;
 
   /* Grid */
@@ -38,16 +44,9 @@ export class DictionaryComponent implements OnInit, AfterViewChecked {
     private ref: ChangeDetectorRef) { }
 
   ngOnInit(): void {
-    this.dictionaryService.populateDefaultDictionary();
     this.tagFilterMode = TagFilterMode.ANY;
+    this.searchText = DictionaryComponent.EMPTY_SEARCH_TEXT;
     this.fetchDictionary();
-    this.search();
-
-    // trigger a size refresh just in case something has gone wrong with the window at start up that
-    // may have messed with our size calculation
-    setTimeout(()=>{
-      this.recalculateGridSize();
-    },100);
   }
 
   ngAfterViewChecked(): void {
@@ -61,7 +60,22 @@ export class DictionaryComponent implements OnInit, AfterViewChecked {
   }
 
   fetchDictionary(): void {
-    this.dictionary = this.dictionaryService.dictionary;
+    if (environment.generateLocalDictionary) {
+      this.dictionary = this.dictionaryService.getDemoDictionary();
+    } else {
+      this.dictionaryService.getRemoteDictionary().subscribe((dictionary) => {
+        this.dictionary = dictionary;
+        this.fetchedDictionary = true;
+        this.search();
+
+        // trigger a size refresh just in case something has gone wrong with the window at start up that
+        // may have messed with our size calculation
+        setTimeout(() => {
+          this.recalculateGridSize();
+        }, 100);
+      });
+    }
+
   }
 
   filterTags(event: any) {
@@ -89,6 +103,7 @@ export class DictionaryComponent implements OnInit, AfterViewChecked {
   search(): void {
     this.searchResults = this.dictionary.searchForDisplay(this.acronymFilter, this.tagsFilter, this.tagFilterMode, this.descriptionFilter);
     this.recalculateGridSize();
+    this.updateSearchText();
   }
 
   recalculateGridSize() {
@@ -113,4 +128,37 @@ export class DictionaryComponent implements OnInit, AfterViewChecked {
     this.gridElement.sortField = '';
     this.gridElement.reset();
   }
+
+  updateSearchText() {
+    const hasAcronymQuery = !DictionaryUtils.isEmpty(this.acronymFilter);
+    const hasTagsQuery = !DictionaryUtils.isEmpty(this.tagsFilter);
+    const hasDescriptionQuery = !DictionaryUtils.isEmpty(this.descriptionFilter);
+    const tagFilterModeTerm = `${this.tagFilterMode.name} of`;
+    const terms = [];
+    if (hasAcronymQuery) {
+      const acronymTerm = hasAcronymQuery ? `Acronym: [${this.acronymFilter}]` : '';
+      terms.push(acronymTerm);
+    }
+
+    if (hasTagsQuery) {
+      const tagNames = this.tagsFilter.map(tag=>tag.name).join(', ');
+      const tagsTerm = hasTagsQuery ? `Tags: ${tagFilterModeTerm} [${tagNames}]`: '';
+      terms.push(tagsTerm);
+    }
+
+    if (hasDescriptionQuery) {
+      const descriptionTerm = hasDescriptionQuery ? `Description: [${this.descriptionFilter}]` : '';
+      terms.push(descriptionTerm);
+    }
+
+    const hasTerms = (terms.length > 0);
+    
+    if (hasTerms) {
+      this.searchText = terms.join(', ');
+    } else {
+      this.searchText = DictionaryComponent.EMPTY_SEARCH_TEXT;
+    }
+
+  }
+
 }

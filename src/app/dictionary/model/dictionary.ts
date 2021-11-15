@@ -1,5 +1,7 @@
+import { isEmpty } from "rxjs/operators";
 import { Acronym } from "./acronym";
 import { TagFilterMode } from "./demo/tag-filter-mode";
+import { DictionaryUtils } from "./dictionary-utils";
 import { DisplayableAcronym } from "./displayable-acronym";
 import { Tag } from "./tag";
 
@@ -10,6 +12,32 @@ export class Dictionary {
 
     constructor() {
         this.reset();
+    }
+
+    public static fromJSON(data: any): Dictionary {
+        const dictionary = new Dictionary();
+        Object.assign(dictionary, data)
+        Object.setPrototypeOf(dictionary, Dictionary.prototype);
+        const tagMap = new Map<string, Tag>();
+
+        for (const tag of dictionary.tags) {
+            Object.setPrototypeOf(tag, Tag.prototype);
+            tagMap.set(tag.name, tag);
+        }
+
+        for (const acronym of dictionary.acronyms) {
+            Object.setPrototypeOf(acronym, Acronym.prototype);
+            const actualTags: Tag[] = [];
+            for (const tag of acronym.tags) {
+                //replace raw data with actual tag
+                const actualTag: Tag = tagMap.get(tag.name)!;
+                actualTags.push(actualTag);
+            }
+            acronym.tags = actualTags;
+        }
+
+        return dictionary;
+
     }
 
     public reset(): void {
@@ -87,11 +115,8 @@ export class Dictionary {
 
     filterOnTags(results: Acronym[], tagsFilter: Tag[], tagFilterMode: TagFilterMode,): Acronym[] {
         // determine if tags were passed in
-        let hasFilterTags = !((tagsFilter === null) || (tagsFilter === undefined));
-        if (hasFilterTags) {
-            hasFilterTags = (tagsFilter.length > 0);
-        }
-        
+        let hasFilterTags = !DictionaryUtils.isEmpty(tagsFilter);
+
         // if we have tags to filter on
         if (hasFilterTags) {
             const filteredResults = results.filter(acronym => {
@@ -201,6 +226,6 @@ export class Dictionary {
         // if there are any tags left in the set, then we have undesired tags
         const onlyHasDesiredTags = (check.size === 0)
         return onlyHasDesiredTags;
-    }   
+    }
 
 }
