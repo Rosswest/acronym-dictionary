@@ -86,17 +86,30 @@ export class Dictionary {
     }
 
     filterOnTags(results: Acronym[], tagsFilter: Tag[], tagFilterMode: TagFilterMode,): Acronym[] {
-        let tagsFilterDefined = !((tagsFilter === null) || (tagsFilter === undefined));
-        if (tagsFilterDefined) {
-            const filterCount = tagsFilter.length;
-            if (filterCount > 0) {
-                const filteredResults = results.filter(acronym => {
-                    const tags = acronym.tags;
-                    const match = this.checkTagRequirementByMode(tags, tagsFilter, tagFilterMode);
-                    return match;
-                });
-                return filteredResults;
-            }
+        // determine if tags were passed in
+        let hasFilterTags = !((tagsFilter === null) || (tagsFilter === undefined));
+        if (hasFilterTags) {
+            hasFilterTags = (tagsFilter.length > 0);
+        }
+        
+        // if we have tags to filter on
+        if (hasFilterTags) {
+            const filteredResults = results.filter(acronym => {
+                const tags = acronym.tags;
+                const match = this.checkTagRequirementByMode(tags, tagsFilter, tagFilterMode);
+                return match;
+            });
+            return filteredResults;
+        }
+
+        // edge case: if we don't have tags to filter on, but filter mode is ONLY, return only untagged acronyms
+        if (!hasFilterTags && tagFilterMode == TagFilterMode.ONLY) {
+            const filteredResults = results.filter(acronym => {
+                const tags = acronym.tags;
+                const hasNoTags = tags.length == 0;
+                return hasNoTags;
+            });
+            return filteredResults;
         }
 
         return results;

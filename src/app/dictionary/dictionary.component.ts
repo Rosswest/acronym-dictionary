@@ -1,4 +1,5 @@
 import { AfterViewChecked, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { Table } from 'primeng/table';
 import { DictionaryService } from './dictionary.service';
 import { TagFilterMode } from './model/demo/tag-filter-mode';
 import { Dictionary } from './model/dictionary';
@@ -30,7 +31,8 @@ export class DictionaryComponent implements OnInit, AfterViewChecked {
 
   /* Grid */
   private gridSizeSet: boolean = false;
-  @ViewChild('resultsGrid') gridElement: any;
+  public sorting: boolean = false;
+  @ViewChild('resultsGrid') gridElement: Table;
 
   constructor(private dictionaryService: DictionaryService,
     private ref: ChangeDetectorRef) { }
@@ -100,4 +102,15 @@ export class DictionaryComponent implements OnInit, AfterViewChecked {
     }
   }
 
+  onSort(event: any) {
+    this.sorting = true;
+  }
+
+  clearSort(event: any) {
+    event.stopPropagation(); // stop the click triggering the filter the header click
+    this.sorting = false;
+    this.gridElement.sortOrder = 0;
+    this.gridElement.sortField = '';
+    this.gridElement.reset();
+  }
 }
